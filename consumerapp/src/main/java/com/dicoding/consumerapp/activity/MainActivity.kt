@@ -2,6 +2,7 @@ package com.dicoding.consumerapp.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -198,6 +199,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if (item.itemId == R.id.action_change_settings) {
+            val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
+            startActivity(mIntent)
+        }
         when (item.itemId) {
             R.id.action_favorite -> {
                 val intent = Intent(this, FavoriteActivity::class.java)
@@ -206,6 +212,10 @@ class MainActivity : AppCompatActivity() {
             R.id.action_change_notification -> {
                 val intent = Intent(this, NotificationSettingsActivity::class.java)
                 startActivity(intent)
+            }
+            R.id.action_change_settings -> {
+                val mIntent = Intent(Settings.ACTION_LOCALE_SETTINGS)
+                startActivity(mIntent)
             }
         }
         return super.onOptionsItemSelected(item)
