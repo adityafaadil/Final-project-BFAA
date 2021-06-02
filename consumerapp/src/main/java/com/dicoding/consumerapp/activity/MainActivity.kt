@@ -1,4 +1,4 @@
-package com.dicoding.githubuser.activity
+package com.dicoding.consumerapp.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,10 +10,10 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.githubuser.R
-import com.dicoding.githubuser.adapter.ListUserAdapter
-import com.dicoding.githubuser.data.User
-import com.dicoding.githubuser.databinding.ActivityMainBinding
+import com.dicoding.consumerapp.R
+import com.dicoding.consumerapp.adapter.ListUserAdapter
+import com.dicoding.consumerapp.data.User
+import com.dicoding.consumerapp.databinding.ActivityMainBinding
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
@@ -37,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.title = "Consumer Notes"
+
         adapter = ListUserAdapter(list)
         binding.rvUsers.setHasFixedSize(true)
 
@@ -56,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         aClient.addHeader("Authorization", "token ${token}")
         aClient.addHeader("User-Agent", "request")
         aClient.get(url, object : AsyncHttpResponseHandler() {
+
             override fun onSuccess(statusCode: Int, headers: Array<Header>, responseBody: ByteArray) {
                 binding.progressBar.visibility = View.INVISIBLE
 
@@ -102,16 +105,14 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, result)
 
                 try {
-                    val jsonArray = JSONObject(result)
-                    val item = jsonArray.getJSONArray("items")
-                    for (i in 0 until item.length()) {
-                        val jsonObject = item.getJSONObject(i)
+                    val jsonArray = JSONArray(result)
+                    for (i in 0 until jsonArray.length()) {
+                        val jsonObject = jsonArray.getJSONObject(i)
                         val username: String? = jsonObject.getString("login")
                         setUser(username)
                     }
                 } catch (e: Exception) {
                     Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT).show()
-                    e.printStackTrace()
                 }
             }
 

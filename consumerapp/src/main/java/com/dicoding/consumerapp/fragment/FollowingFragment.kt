@@ -1,4 +1,4 @@
-package com.dicoding.githubuser.fragment
+package com.dicoding.consumerapp.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -8,21 +8,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.githubuser.activity.DetailActivity
-import com.dicoding.githubuser.adapter.FollowersAdapter
-import com.dicoding.githubuser.data.User
-import com.dicoding.githubuser.data.UserFavorite
-import com.dicoding.githubuser.databinding.FragmentFollowersBinding
+import com.dicoding.consumerapp.activity.DetailActivity
+import com.dicoding.consumerapp.adapter.FollowingAdapter
+import com.dicoding.consumerapp.data.User
+import com.dicoding.consumerapp.data.UserFavorite
+import com.dicoding.consumerapp.databinding.FragmentFollowingBinding
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import org.json.JSONArray
 import org.json.JSONObject
 
-class FollowersFragment : Fragment() {
+class FollowingFragment : Fragment() {
 
     companion object {
-        private val TAG = FollowersFragment::class.java.simpleName
+        private val TAG = FollowingFragment::class.java.simpleName
     }
 
     private var list: ArrayList<User> = ArrayList()
@@ -31,48 +31,52 @@ class FollowersFragment : Fragment() {
     private lateinit var userFavorite: UserFavorite
     private lateinit var user: User
 
-    private lateinit var adapter: FollowersAdapter
-    private var _binding: FragmentFollowersBinding? = null
+
+    private lateinit var adapter: FollowingAdapter
+    private var _binding: FragmentFollowingBinding? = null
     private val binding get() = _binding
     private var token = "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"
 
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentFollowersBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentFollowingBinding.inflate(layoutInflater, container, false)
         val view = binding?.root
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = FollowersAdapter(list)
+        adapter = FollowingAdapter(list)
         list.clear()
+
 
         favorites = activity?.intent?.getParcelableExtra(DetailActivity.EXTRA_NOTE)
 
         if (favorites != null) {
             userFavorite = activity?.intent?.getParcelableExtra<UserFavorite>(DetailActivity.EXTRA_NOTE) as UserFavorite
-            getFollowers(userFavorite.username.toString())
+            getFollowing(userFavorite.username.toString())
         } else {
             user = activity?.intent?.getParcelableExtra<User>(DetailActivity.EXTRA_DATA) as User
-            getFollowers(user.username.toString())
+            getFollowing(user.username.toString())
         }
     }
 
     private fun showRecyclerList() {
-        binding?.rvFollowers?.layoutManager = LinearLayoutManager(activity)
-        binding?.rvFollowers?.adapter = adapter
+        binding?.rvFollowing?.layoutManager = LinearLayoutManager(activity)
+        binding?.rvFollowing?.adapter = adapter
     }
 
-    fun getFollowers(id: String) {
-        binding?.progressBarFollowers?.visibility = View.VISIBLE
+    fun getFollowing(id: String) {
+        binding?.progressBarFollowing?.visibility = View.VISIBLE
 
         val aClient = AsyncHttpClient()
-        val url = "https://api.github.com/users/$id/followers"
+        val url = "https://api.github.com/users/$id/following"
         aClient.addHeader("Authorization", "token ${token}")
         aClient.addHeader("User-Agent", "request")
         aClient.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Array<Header>, responseBody: ByteArray) {
-                binding?.progressBarFollowers?.visibility = View.INVISIBLE
+                binding?.progressBarFollowing?.visibility = View.INVISIBLE
                 val result = String(responseBody)
                 Log.d(TAG, result)
                 try {
@@ -80,7 +84,7 @@ class FollowersFragment : Fragment() {
                     for (i in 0 until jsonArray.length()) {
                         val jsonObject = jsonArray.getJSONObject(i)
                         val username: String? = jsonObject.getString("login")
-                        setFollowers(username)
+                        setFollowing(username)
                     }
                 } catch (e: Exception) {
                     Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
@@ -89,7 +93,7 @@ class FollowersFragment : Fragment() {
             }
 
             override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
-                binding?.progressBarFollowers?.visibility = View.INVISIBLE
+                binding?.progressBarFollowing?.visibility = View.INVISIBLE
                 val errorMessage = when (statusCode) {
                     401 -> "$statusCode : Bad Request"
                     403 -> "$statusCode : Forbidden"
@@ -101,8 +105,8 @@ class FollowersFragment : Fragment() {
         })
     }
 
-    fun setFollowers(id: String?) {
-        binding?.progressBarFollowers?.visibility = View.VISIBLE
+    fun setFollowing(id: String?) {
+        binding?.progressBarFollowing?.visibility = View.VISIBLE
 
         val aClient = AsyncHttpClient()
         val url = "https://api.github.com/users/$id"
@@ -110,7 +114,7 @@ class FollowersFragment : Fragment() {
         aClient.addHeader("User-Agent", "request")
         aClient.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(statusCode: Int, headers: Array<Header>, responseBody: ByteArray) {
-                binding?.progressBarFollowers?.visibility = View.INVISIBLE
+                binding?.progressBarFollowing?.visibility = View.INVISIBLE
 
                 val result = String(responseBody)
                 Log.d(TAG, result)
@@ -134,7 +138,7 @@ class FollowersFragment : Fragment() {
             }
 
             override fun onFailure(statusCode: Int, headers: Array<Header>, responseBody: ByteArray, error: Throwable) {
-                binding?.progressBarFollowers?.visibility = View.INVISIBLE
+                binding?.progressBarFollowing?.visibility = View.INVISIBLE
                 val errorMessage = when (statusCode) {
                     401 -> "$statusCode : Bad Request"
                     403 -> "$statusCode : Forbidden"

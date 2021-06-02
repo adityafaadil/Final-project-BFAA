@@ -35,7 +35,7 @@ class FollowingFragment : Fragment() {
     private lateinit var adapter: FollowingAdapter
     private var _binding: FragmentFollowingBinding? = null
     private val binding get() = _binding
-    private var token = "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"
+    private var token = "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"
 
 
 

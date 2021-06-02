@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <permission
-        android:name="com.dicoding.githubuser2.READ_DATABASE"
+        android:name="com.dicoding.githubuser.READ_DATABASE"
         android:protectionLevel="normal" />
     <permission
         android:name="com.dicoding.githubuser.WRITE_DATABASE"

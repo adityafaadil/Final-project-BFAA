@@ -1,4 +1,4 @@
-package com.dicoding.githubuser.fragment
+package com.dicoding.consumerapp.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.githubuser.activity.DetailActivity
-import com.dicoding.githubuser.adapter.FollowersAdapter
-import com.dicoding.githubuser.data.User
-import com.dicoding.githubuser.data.UserFavorite
-import com.dicoding.githubuser.databinding.FragmentFollowersBinding
+import com.dicoding.consumerapp.activity.DetailActivity
+import com.dicoding.consumerapp.adapter.FollowersAdapter
+import com.dicoding.consumerapp.data.User
+import com.dicoding.consumerapp.data.UserFavorite
+import com.dicoding.consumerapp.databinding.FragmentFollowersBinding
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
